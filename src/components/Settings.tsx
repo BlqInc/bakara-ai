@@ -167,6 +167,9 @@ function NumberInput({ label, value, onChange, step, min, max, prefix, suffix }:
   prefix?: string;
   suffix?: string;
 }) {
+  const [editing, setEditing] = useState(false);
+  const [inputValue, setInputValue] = useState('');
+
   const decrease = () => {
     const next = value - step;
     if (min !== undefined && next < min) return;
@@ -179,6 +182,26 @@ function NumberInput({ label, value, onChange, step, min, max, prefix, suffix }:
     onChange(next);
   };
 
+  const startEditing = () => {
+    setInputValue(String(value));
+    setEditing(true);
+  };
+
+  const finishEditing = () => {
+    setEditing(false);
+    const parsed = parseInt(inputValue.replace(/[^0-9]/g, ''), 10);
+    if (isNaN(parsed)) return;
+    let clamped = parsed;
+    if (min !== undefined && clamped < min) clamped = min;
+    if (max !== undefined && clamped > max) clamped = max;
+    onChange(clamped);
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter') finishEditing();
+    if (e.key === 'Escape') setEditing(false);
+  };
+
   return (
     <div className="flex items-center justify-between">
       <span className="text-slate-300 text-sm">{label}</span>
@@ -189,9 +212,25 @@ function NumberInput({ label, value, onChange, step, min, max, prefix, suffix }:
         >
           -
         </button>
-        <span className="text-white font-bold text-sm min-w-[100px] text-center">
-          {prefix}{value.toLocaleString()}{suffix}
-        </span>
+        {editing ? (
+          <input
+            type="text"
+            inputMode="numeric"
+            value={inputValue}
+            onChange={e => setInputValue(e.target.value)}
+            onBlur={finishEditing}
+            onKeyDown={handleKeyDown}
+            autoFocus
+            className="w-[100px] text-center bg-slate-600 text-white font-bold text-sm rounded-lg px-2 py-1 outline-none border-2 border-yellow-500"
+          />
+        ) : (
+          <button
+            onClick={startEditing}
+            className="text-white font-bold text-sm min-w-[100px] text-center py-1 rounded-lg hover:bg-slate-700/50 active:bg-slate-600/50 transition-colors"
+          >
+            {prefix}{value.toLocaleString()}{suffix}
+          </button>
+        )}
         <button
           onClick={increase}
           className="w-8 h-8 bg-slate-600 text-white rounded-lg text-lg font-bold active:scale-90 transition-transform"
