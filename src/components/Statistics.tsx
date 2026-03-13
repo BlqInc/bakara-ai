@@ -10,7 +10,7 @@ interface Props {
 export function Statistics({ session, probability }: Props) {
   const stats = RiskManager.getSessionStats(session);
   const observed = ProbabilityEngine.calculateObserved(session.rounds);
-  const ev = ProbabilityEngine.calculateEV(probability);
+  const ev = ProbabilityEngine.calculateEV(probability, session.settings.bankerCommission ?? 5);
 
   return (
     <div className="space-y-4">

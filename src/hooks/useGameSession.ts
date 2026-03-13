@@ -132,7 +132,8 @@ export function useGameSession() {
         (betType === 'banker' && gameResult === 'banker')
       ) {
         result = 'win';
-        payout = betType === 'banker' ? amount * 0.95 : amount;
+        const commission = prev.settings.bankerCommission ?? 5;
+        payout = betType === 'banker' ? amount * (1 - commission / 100) : amount;
       } else if (betType === 'skip') {
         result = 'push';
         payout = 0;

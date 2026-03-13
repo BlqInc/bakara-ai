@@ -94,6 +94,7 @@ export interface SessionSettings {
   strategy: StrategyType;     // 베팅 전략
   maxConsecutiveLoss: number; // 최대 연패 허용
   sessionTimeLimit: number;   // 세션 시간 제한 (분)
+  bankerCommission: number;   // 뱅커 커미션 (0-10, %)
 }
 
 export interface GameSession {

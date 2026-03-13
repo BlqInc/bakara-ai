@@ -12,6 +12,7 @@ interface StrategyContext {
   betHistory: BetRecord[];
   baseBet: number;          // 기본 베팅 단위
   probability: ProbabilityState;
+  bankerCommission: number; // 뱅커 커미션 (%)
 }
 
 interface StrategyResult {
@@ -182,7 +183,7 @@ function kellyCriterion(ctx: StrategyContext): StrategyResult {
   const prob = ctx.probability;
 
   // 뱅커 베팅 기준 (가장 유리한 베팅)
-  const b = PAYOUT.banker; // 0.95
+  const b = 1 - (ctx.bankerCommission ?? 5) / 100; // 커미션 반영 배당률
   const p = prob.bankerWin / (prob.bankerWin + prob.playerWin); // 타이 제외 승률
   const q = 1 - p;
 
@@ -319,6 +320,7 @@ export function simulateStrategy(
       betHistory: history,
       baseBet,
       probability: prob,
+      bankerCommission: 5,
     };
 
     const { betSize } = calculateBetSize(strategy, ctx);

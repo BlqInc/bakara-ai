@@ -34,7 +34,7 @@ export class RecommendationEngine {
 
     // 1. 확률 계산
     const probability = ProbabilityEngine.calculate(shoeTracker);
-    const ev = ProbabilityEngine.calculateEV(probability);
+    const ev = ProbabilityEngine.calculateEV(probability, settings.bankerCommission ?? 5);
 
     // 2. 패턴 시그널 수집
     let patternSignals = PatternAnalyzer.analyze(results);
@@ -94,6 +94,7 @@ export class RecommendationEngine {
         betHistory: bets,
         baseBet: settings.minBet,
         probability,
+        bankerCommission: settings.bankerCommission ?? 5,
       }
     );
 

@@ -59,6 +59,44 @@ export function Settings({ settings, onSave, onStartSession, isSessionActive }: 
         </div>
       </div>
 
+      {/* 테이블 설정 */}
+      <div className="bg-slate-800 rounded-2xl p-4">
+        <h3 className="text-white font-bold text-sm mb-3">테이블 설정</h3>
+        <div className="space-y-3">
+          <NumberInput
+            label="뱅커 커미션"
+            value={form.bankerCommission ?? 5}
+            onChange={v => update('bankerCommission', v)}
+            step={1}
+            min={0}
+            max={10}
+            suffix="%"
+          />
+          <div className="flex gap-2">
+            <button
+              onClick={() => update('bankerCommission', 5)}
+              className={`flex-1 py-2 rounded-lg text-xs font-bold transition-all ${
+                (form.bankerCommission ?? 5) === 5
+                  ? 'bg-yellow-600/30 text-yellow-300 border border-yellow-500/50'
+                  : 'bg-slate-700 text-slate-400'
+              }`}
+            >
+              일반 (5%)
+            </button>
+            <button
+              onClick={() => update('bankerCommission', 0)}
+              className={`flex-1 py-2 rounded-lg text-xs font-bold transition-all ${
+                form.bankerCommission === 0
+                  ? 'bg-yellow-600/30 text-yellow-300 border border-yellow-500/50'
+                  : 'bg-slate-700 text-slate-400'
+              }`}
+            >
+              노커미션 (0%)
+            </button>
+          </div>
+        </div>
+      </div>
+
       {/* 리스크 관리 */}
       <div className="bg-slate-800 rounded-2xl p-4">
         <h3 className="text-white font-bold text-sm mb-3">리스크 관리</h3>

@@ -62,18 +62,19 @@ export class ProbabilityEngine {
    * 기대값 계산 (Expected Value)
    * 양수면 플레이어에게 유리, 음수면 불리
    */
-  static calculateEV(prob: ProbabilityState): {
+  static calculateEV(prob: ProbabilityState, bankerCommission = 5): {
     playerEV: number;
     bankerEV: number;
     tieEV: number;
     playerPairEV: number;
     bankerPairEV: number;
   } {
+    const bankerPayout = 1 - bankerCommission / 100;
     return {
       // 플레이어 베팅 EV = P(win) * 1 - P(lose) * 1 + P(tie) * 0
       playerEV: prob.playerWin * PAYOUT.player - prob.bankerWin * 1,
-      // 뱅커 베팅 EV = P(win) * 0.95 - P(lose) * 1 + P(tie) * 0
-      bankerEV: prob.bankerWin * PAYOUT.banker - prob.playerWin * 1,
+      // 뱅커 베팅 EV = P(win) * payout - P(lose) * 1 + P(tie) * 0
+      bankerEV: prob.bankerWin * bankerPayout - prob.playerWin * 1,
       // 타이 EV = P(tie) * 8 - P(not tie) * 1
       tieEV: prob.tie * PAYOUT.tie - (1 - prob.tie) * 1,
       // 페어 EV

@@ -74,6 +74,7 @@ export const DEFAULT_SETTINGS: SessionSettings = {
   strategy: 'kelly',
   maxConsecutiveLoss: 5,
   sessionTimeLimit: 120,         // 2시간
+  bankerCommission: 5,           // 5% 기본 커미션
 };
 
 // === 본매 스코어보드 상수 ===
