@@ -1,7 +1,9 @@
-import type { GameSession, BetRecommendation, RiskAlert as RiskAlertType } from '../utils/types';
+import { useState } from 'react';
+import type { GameSession, GameResult, BetType, BetRecommendation, RiskAlert as RiskAlertType } from '../utils/types';
 import { Recommendation } from './Recommendation';
 import { QuickInput } from './QuickInput';
 import { RiskAlertPanel } from './RiskAlert';
+import { BetInputModal } from './BetInputModal';
 import { predictDerivedRoad } from '../engine/scoreboard';
 
 interface Props {
@@ -12,7 +14,7 @@ interface Props {
   learningRounds?: number;
   onResult: (result: 'player' | 'banker' | 'tie', playerPair?: boolean, bankerPair?: boolean) => void;
   onUndo: () => void;
-  onRecordBet: (betType: any, amount: number, result: any) => void;
+  onRecordBet: (betType: BetType, amount: number, result: GameResult) => void;
 }
 
 export function Dashboard({
@@ -29,22 +31,54 @@ export function Dashboard({
   const profit = currentBankroll - settings.initialBankroll;
   const profitRate = (profit / settings.initialBankroll) * 100;
 
+  // 베팅 입력 모달 상태
+  const [pendingGameResult, setPendingGameResult] = useState<{
+    result: GameResult;
+    playerPair: boolean;
+    bankerPair: boolean;
+  } | null>(null);
+
   // 예측 중국점
   const results = rounds.map(r => r.result);
   const playerPrediction = results.length > 3 ? predictDerivedRoad(results, 'player') : null;
   const bankerPrediction = results.length > 3 ? predictDerivedRoad(results, 'banker') : null;
 
-  // 결과 입력 + 자동 베팅 기록
-  const handleResult = (result: 'player' | 'banker' | 'tie', playerPair = false, bankerPair = false) => {
-    // 추천에 따라 베팅 기록
-    if (recommendation && recommendation.betType !== 'skip') {
-      onRecordBet(recommendation.betType, recommendation.amount, result);
-    }
+  // P/B/T 버튼 → 모달 열기
+  const handleResult = (result: GameResult, playerPair = false, bankerPair = false) => {
+    setPendingGameResult({ result, playerPair, bankerPair });
+  };
+
+  // 모달에서 베팅 확인
+  const handleBetConfirm = (betType: BetType, amount: number) => {
+    if (!pendingGameResult) return;
+    const { result, playerPair, bankerPair } = pendingGameResult;
+    onRecordBet(betType, amount, result);
     onResult(result, playerPair, bankerPair);
+    setPendingGameResult(null);
+  };
+
+  // 모달에서 베팅 안 함
+  const handleBetSkip = () => {
+    if (!pendingGameResult) return;
+    const { result, playerPair, bankerPair } = pendingGameResult;
+    onResult(result, playerPair, bankerPair);
+    setPendingGameResult(null);
   };
 
   return (
     <div className="space-y-4">
+      {/* 베팅 입력 모달 */}
+      {pendingGameResult && (
+        <BetInputModal
+          gameResult={pendingGameResult.result}
+          recommendation={recommendation}
+          minBet={settings.minBet}
+          maxBet={settings.maxBet}
+          onConfirm={handleBetConfirm}
+          onSkip={handleBetSkip}
+        />
+      )}
+
       {/* 자본금 상태 */}
       <div className="bg-slate-800 rounded-2xl p-4">
         <div className="flex justify-between items-center">
