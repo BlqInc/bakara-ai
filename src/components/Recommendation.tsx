@@ -1,9 +1,7 @@
 import type { BetRecommendation } from '../utils/types';
-import { COLORS } from '../utils/constants';
 
 interface Props {
   recommendation: BetRecommendation | null;
-  currentBankroll: number;
 }
 
 const RISK_LABELS = {
@@ -13,7 +11,7 @@ const RISK_LABELS = {
   extreme: { text: '위험', color: 'bg-red-600' },
 };
 
-export function Recommendation({ recommendation, currentBankroll }: Props) {
+export function Recommendation({ recommendation }: Props) {
   if (!recommendation) {
     return (
       <div className="bg-slate-800 rounded-2xl p-6 text-center">

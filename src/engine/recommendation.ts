@@ -2,7 +2,7 @@ import type {
   GameResult, BetType, BetRecommendation, GameSession,
   PatternSignal, ProbabilityState,
 } from '../utils/types';
-import { BASE_PROBABILITY, PAYOUT } from '../utils/constants';
+import { PAYOUT } from '../utils/constants';
 import { ProbabilityEngine } from './probability';
 import { PatternAnalyzer } from './patternAnalyzer';
 import { calculateBetSize } from './bettingStrategy';
@@ -48,7 +48,7 @@ export class RecommendationEngine {
     let sequencePrediction: { prediction: GameResult; confidence: number } | null = null;
     if (learningEngine && results.length >= 3) {
       const seqResult = learningEngine.predictFromSequence(results);
-      if (seqResult && seqResult.sampleSize >= 5) {
+      if (seqResult && seqResult.prediction && seqResult.sampleSize >= 5) {
         sequencePrediction = { prediction: seqResult.prediction, confidence: seqResult.confidence };
       }
     }
@@ -180,7 +180,6 @@ export class RecommendationEngine {
     // 패턴 시그널 강도에 따른 보너스
     if (signals.length > 0) {
       // 같은 방향의 시그널이 많으면 신뢰도 증가
-      const directions = signals.map(s => s.direction);
       const bankerSignals = signals.filter(s => s.direction === 'banker');
       const playerSignals = signals.filter(s => s.direction === 'player');
 
@@ -207,7 +206,7 @@ export class RecommendationEngine {
   private static shouldSkip(
     session: GameSession,
     confidence: number,
-    prob: ProbabilityState
+    _prob: ProbabilityState
   ): boolean {
     const { settings, currentBankroll, bets } = session;
     const profit = currentBankroll - settings.initialBankroll;

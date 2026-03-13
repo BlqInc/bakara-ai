@@ -93,7 +93,6 @@ export default function App() {
             session={session}
             recommendation={recommendation}
             riskAlerts={riskAlerts}
-            probability={probability}
             shoeType={shoeType}
             learningRounds={learningStats.totalRoundsLearned}
             onResult={addResult}

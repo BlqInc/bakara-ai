@@ -171,7 +171,7 @@ export function LearningStats({ stats, shoeType, strategyRecommendation }: Props
         <div className="mt-3">
           <div className="text-xs text-slate-400 mb-1">학습 레벨</div>
           <div className="flex gap-1">
-            {[100, 500, 1000, 3000, 10000].map((threshold, i) => (
+            {[100, 500, 1000, 3000, 10000].map((threshold) => (
               <div
                 key={threshold}
                 className={`flex-1 h-1.5 rounded-full ${

@@ -26,8 +26,6 @@ export function Settings({ settings, onSave, onStartSession, isSessionActive }: 
     onStartSession(form);
   };
 
-  const riskProfile = getStrategyRiskProfile(form.strategy);
-
   return (
     <div className="space-y-4">
       {/* 자본금 설정 */}

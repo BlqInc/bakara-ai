@@ -1,7 +1,7 @@
 import { useState, useCallback, useRef, useEffect } from 'react';
 import type {
-  GameSession, SessionSettings, GameResult, RoundResult,
-  BetRecord, BetType, BetRecommendation, RiskAlert, ProbabilityState,
+  GameSession, SessionSettings, GameResult, BetRecord,
+  BetType, BetRecommendation, RiskAlert, ProbabilityState,
 } from '../utils/types';
 import { DEFAULT_SETTINGS, BASE_PROBABILITY } from '../utils/constants';
 import { createSimpleRound } from '../engine/baccarat';
@@ -49,11 +49,6 @@ export function useGameSession() {
   // 새 세션 시작
   const startSession = useCallback((customSettings?: SessionSettings) => {
     const s = customSettings ?? settings;
-
-    // 학습 엔진에 전략 추천 확인
-    const le = learningEngineRef.current;
-    const strategyRec = le.recommendStrategy([]);
-    // 자동 전략 전환은 추천만 하고 사용자가 직접 설정
 
     setSettings(s);
     saveSettings(s);

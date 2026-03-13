@@ -1,4 +1,4 @@
-import type { GameSession, BetRecommendation, RiskAlert as RiskAlertType, ProbabilityState } from '../utils/types';
+import type { GameSession, BetRecommendation, RiskAlert as RiskAlertType } from '../utils/types';
 import { Recommendation } from './Recommendation';
 import { QuickInput } from './QuickInput';
 import { RiskAlertPanel } from './RiskAlert';
@@ -8,7 +8,6 @@ interface Props {
   session: GameSession;
   recommendation: BetRecommendation | null;
   riskAlerts: RiskAlertType[];
-  probability: ProbabilityState;
   shoeType?: 'streak' | 'chop' | 'mixed';
   learningRounds?: number;
   onResult: (result: 'player' | 'banker' | 'tie', playerPair?: boolean, bankerPair?: boolean) => void;
@@ -20,7 +19,6 @@ export function Dashboard({
   session,
   recommendation,
   riskAlerts,
-  probability,
   shoeType,
   learningRounds,
   onResult,
@@ -98,7 +96,7 @@ export function Dashboard({
       <RiskAlertPanel alerts={riskAlerts} />
 
       {/* AI 추천 */}
-      <Recommendation recommendation={recommendation} currentBankroll={currentBankroll} />
+      <Recommendation recommendation={recommendation} />
 
       {/* 예측 중국점 (다음 결과별) */}
       {(playerPrediction || bankerPrediction) && (

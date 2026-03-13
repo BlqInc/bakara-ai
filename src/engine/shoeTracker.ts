@@ -1,5 +1,5 @@
 import type { Card, Rank, ShoeState } from '../utils/types';
-import { CARD_VALUES, DECK_COUNT, TOTAL_CARDS, INITIAL_CARD_COUNTS } from '../utils/constants';
+import { DECK_COUNT, TOTAL_CARDS, INITIAL_CARD_COUNTS } from '../utils/constants';
 
 /**
  * 슈 트래커 - 8덱 슈의 카드 소진 상태를 추적하여 확률 변동을 계산

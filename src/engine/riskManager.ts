@@ -180,7 +180,6 @@ export class RiskManager {
 
     const units = Math.floor(currentBankroll / betSize);
     const p = winProb;
-    const q = 1 - p;
 
     // 간단한 시뮬레이션 기반 추정
     const simulations = 1000;

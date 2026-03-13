@@ -193,7 +193,6 @@ export class PatternAnalyzer {
 
       const recent = entries.slice(-10);
       const redCount = recent.filter(e => e.color === 'red').length;
-      const blueCount = recent.filter(e => e.color === 'blue').length;
       const total = recent.length;
       const redRatio = redCount / total;
 
